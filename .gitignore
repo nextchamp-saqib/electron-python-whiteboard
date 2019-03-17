@@ -12,3 +12,4 @@ thumbs.db
 whiteboardApp
 .electron-vue
 *.mp4
+src/main/pyDist

@@ -29,17 +29,17 @@ a {
 .el-button {
     position: absolute;
     z-index: 10;
-    background-color: #242424;
+    background-color: #ccc;
     border: none;
+    color: #242424 !important;
 }
 
 .fa-home{
-    color: #ababab;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .fa-home:hover{
-    color: lightblue;
+    color: white;
 }
 </style>
 

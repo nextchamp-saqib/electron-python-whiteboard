@@ -19,7 +19,7 @@ body{
   margin: 0;
   overflow: hidden;
   height: 100vh;
-  background-color: #242424;
+  background-color: #ccc;
 }
 
 #app {

@@ -1,30 +1,21 @@
-from imutils.video import FileVideoStream
-from imutils.video import FPS
-import imutils
-import cv2
 import time
 
-# fvs = FileVideoStream('http://192.168.2.106:8258/video').start()
-# time.sleep(1.0)
+# import pyautogui
+from pynput.mouse import Button, Controller
 
-# while fvs.more():
-#   frame = fvs.read()
-#   frame = imutils.resize(frame, width=640)
-#   cv2.imshow('video', frame)
+mouse = Controller()
+c = 0
 
-#   if cv2.waitKey(33) == ord('q'):
-#     fvs.stop()
-#     break
-
-
-cap = cv2.VideoCapture('http://192.168.2.106:8258/video')
 time.sleep(1.0)
+mouse.position = (640, 360)
+mouse.press(Button.left)
+while True:
+    mouse.move(6, 6)
+    mouse.move(6, -6)
+    c += 1
+    if c > 20:
+        break
 
-while cap.isOpened():
-  ret, frame = cap.read()
-  frame = imutils.resize(frame, width=640)
-  cv2.imshow('video', frame)
+mouse.release(Button.left)
+# print(time.time() - start)
 
-  if cv2.waitKey(33) == ord('q'):
-    cap.release()
-    break

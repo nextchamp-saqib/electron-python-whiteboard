@@ -7,86 +7,95 @@
       <!-- <div class="one"></div>
       <div class="two"></div>
       <div class='three'></div>
-      <div class="four"></div> -->
+      <div class="four"></div>-->
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CalibrationScreen',
+  name: "CalibrationScreen",
   data() {
     return {
       showRect: false
-    }
+    };
   },
   mounted() {
     setTimeout(() => {
-      this.showRect = true
-      const zerorpc = require('zerorpc')
-      const client = new zerorpc.Client()
-      client.connect("tcp://127.0.0.1:1122")
+      this.showRect = true;
+      const zerorpc = require("zerorpc");
+      const client = new zerorpc.Client({
+        timeout: 10000,
+        heartbeatInterval: 300000
+      });
+
+      client.connect("tcp://127.0.0.1:1122");
 
       client.invoke("startCalibrating", (error, res) => {
-        if(error) {
-          this.showRect = false
-          console.error(error)
+        if (error) {
+          this.showRect = false;
+          console.error(error);
+          client.close();
         } else {
-          this.showRect = false
-          console.log(res)
+          this.showRect = false;
+          this.$router.replace({ name: "new-screen" });
+          console.log(res);
+          client.invoke("listenForIR", (error, res) => {
+            if (error) {
+              console.error(error);
+            } else {
+              console.log(res);
+              client.close();
+            }
+          });
         }
-      })
-
-      // client.invoke("printSomethingFunc", (error, res) => {
-      //   if(error) {
-      //     // this.showRect = false
-      //     console.error(error)
-      //   } else {
-      //     // this.showRect = false
-      //     console.log(res)
-      //   }
-      // })
-
-    }, 3000)
+      });
+    }, 3000);
   }
-}
+};
 </script>
 
 <style scoped>
 .container {
   flex-direction: column;
   justify-content: center;
+  /* background-color: #ccc; */
   background-color: #242424;
   height: 100%;
-  display: flex;
-  /* align-items: center; */
-}
-
-.initialize{
+  width: 100%;
   display: flex;
   align-items: center;
-  background-color: #ababab;
-  border: 1px solid rgba(0,0,0,0.2);
-  box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
+}
+
+.initialize {
+  display: flex;
+  align-items: center;
+  /* background-color: #242424; */
+  background-color: #ccc;
+
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.6);
   border-radius: 4px;
   width: 20vw;
   height: 10vh;
   text-align: center;
   font-size: 1.5vw;
+  color: #ccc;
 }
 
 .initialize > p {
   width: 100%;
 }
 
-.rectangle{
+.rectangle {
   display: block;
   position: relative;
-  border: 1vw solid #ababab;
+  border: 1vw solid #242424;
   /* border-radius: 12px; */
+  border: 1vw solid #ccc;
   width: 20vw;
   height: 20vh;
-  animation-delay: 2s; 
+  animation-delay: 2s;
   animation-name: expand;
   animation-timing-function: ease-out;
   animation-duration: 2s;
@@ -94,51 +103,16 @@ export default {
   animation-direction: alternate;
 }
 
-.one{
-  border-bottom-right-radius:100%;
-  top: -2px;
-  left: -2px;
-  position: absolute;
-  width: 3vw;
-  height: 4vh;
-  background-color: #ababab;
-}
-.two{
-  border-bottom-left-radius:100%;
-  right: -2px;
-  top: -2px;
-  position: absolute;
-  width: 3vw;
-  height: 4vh;
-  background-color: #ababab;
-}
-.three{
-  border-top-left-radius:100%;
-  position: absolute;
-  right: -2px;
-  bottom: -2px;
-  width: 3vw;
-  height: 4vh;
-  background-color: #ababab;
-}
-.four{
-  border-top-right-radius:100%;
-  position: absolute;
-  left: -2px;
-  bottom: -2px;
-  width: 3vw;
-  height: 4vh;
-  background-color: #ababab;
-}
-
-@keyframes expand{
+@keyframes expand {
   from {
     width: 20vw;
     height: 20vh;
   }
-  to{
-    width: 98vw;
-    height: 96vh;
+  to {
+    /* width: 98vw;
+    height: 96vh; */
+    width: 96vw;
+    height: 94vh;
   }
 }
 </style>

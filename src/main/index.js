@@ -64,7 +64,9 @@ const createPythonProcess = () => {
   let port = '' + selectPort()
 
   if (guessPackaged()) {
-    pythonProcess = require('child_process').execFile(script, [port])
+    // pythonProcess = require('child_process').execFile(script, [port])
+    let script = path.join(__dirname, '../python/', 'main.py')
+    pythonProcess = require('child_process').spawn('python', [script, port])
     console.log('child execution success on port ' + port)
   } else {
     pythonProcess = require('child_process').spawn('python', [script, port])
